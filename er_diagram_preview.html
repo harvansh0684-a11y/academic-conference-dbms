@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Conference DBMS - ER Diagram & Schema Visualizer</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1E3A8A;
+            --accent: #2563EB;
+            --bg: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --border: #E2E8F0;
+            --text-dark: #0F172A;
+            --text-muted: #64748B;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: var(--bg); color: var(--text-dark); padding: 24px; }
+        header { background: linear-gradient(135deg, #0B192C 0%, #1E3A8A 100%); color: white; padding: 28px 32px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+        p.subtitle { color: #93C5FD; font-size: 14px; }
+        .badge-bar { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .badge { background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+        .card-title { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 16px; border-bottom: 2px solid #EFF6FF; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .mermaid-container { overflow-x: auto; padding: 16px; background: #FFFFFF; border-radius: 8px; border: 1px dashed var(--border); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .entity-box { background: #F8FAFC; border-left: 4px solid var(--accent); padding: 14px 16px; border-radius: 6px; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .entity-name { font-weight: 700; font-size: 14px; color: var(--primary); margin-bottom: 4px; }
+        .entity-pk { font-size: 12px; color: #DC2626; font-family: monospace; font-weight: 600; }
+        .entity-fk { font-size: 12px; color: #2563EB; font-family: monospace; }
+        .entity-desc { font-size: 12px; color: var(--text-muted); margin-top: 6px; line-height: 1.4; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+        th { background: #1E3A8A; color: white; text-align: left; padding: 10px 12px; }
+        td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+        tr:nth-child(even) { background-color: #F8FAFC; }
+        .tag-pill { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+        .tag-pk { background: #FEE2E2; color: #991B1B; }
+        .tag-fk { background: #DBEAFE; color: #1E40AF; }
+        .tag-uk { background: #FEF3C7; color: #92400E; }
+        .btn-print { background: white; color: var(--primary); border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; }
+        .btn-print:hover { background: #F1F5F9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h1>Academic Conference Paper Submission and Review DBMS</h1>
+                    <p class="subtitle">Review 1 (Week 7) | Conceptual Entity-Relationship (ER) Design & 3NF Schema Architecture</p>
+                </div>
+                <button class="btn-print" onclick="window.print()">🖨 Print / Export PDF</button>
+            </div>
+            <div class="badge-bar">
+                <span class="badge">Course: CS304 - DBMS</span>
+                <span class="badge">14 Principal Entities</span>
+                <span class="badge">Third Normal Form (3NF)</span>
+                <span class="badge">PostgreSQL / MySQL</span>
+                <span class="badge">Double-Blind & COI Ready</span>
+            </div>
+        </header>
+
+        <!-- MERMAID DIAGRAM CARD -->
+        <div class="card">
+            <div class="card-title">
+                <span>📊 Interactive Conceptual ER Diagram (Crow's Foot Notation)</span>
+                <span style="font-size: 12px; color: var(--text-muted); font-weight: normal;">Visualizes all 14 Entities + Associative Tables</span>
+            </div>
+            <div class="mermaid-container">
+                <pre class="mermaid">
+erDiagram
+    CONFERENCES ||--|{ TRACKS : hosts
+    TRACKS ||--|{ TOPICS : contains
+    CONFERENCES ||--|{ SESSIONS : organizes
+    TRACKS ||--|{ SESSIONS : allocates
+    
+    USERS ||--o| AUTHORS : specializes
+    USERS ||--o| REVIEWERS : specializes
+    
+    AUTHORS ||--|{ PAPER_AUTHORS : contributes
+    PAPERS ||--|{ PAPER_AUTHORS : has_coauthors
+    TRACKS ||--|{ PAPERS : categorized_under
+    
+    PAPERS ||--|{ PAPER_VERSIONS : tracks_revisions
+    
+    REVIEWERS ||--|{ REVIEWER_EXPERTISE : declares
+    TOPICS ||--|{ REVIEWER_EXPERTISE : classified_by
+    
+    REVIEWERS ||--o{ REVIEWER_CONFLICTS : has_conflict_with
+    AUTHORS ||--o{ REVIEWER_CONFLICTS : conflicts_with
+    
+    PAPERS ||--|{ PAPER_ASSIGNMENTS : assigned_for_review
+    REVIEWERS ||--|{ PAPER_ASSIGNMENTS : receives_assignment
+    
+    PAPER_ASSIGNMENTS ||--|| REVIEWS : generates
+    
+    PAPERS ||--o| DECISIONS : receives_verdict
+    USERS ||--o{ DECISIONS : pronounced_by_chair
+    
+    CONFERENCES ||--|{ REGISTRATIONS : receives_registration
+    USERS ||--|{ REGISTRATIONS : registers_as_attendee
+    PAPERS ||--o{ REGISTRATIONS : associated_paper
+    
+    SESSIONS ||--|{ PRESENTATION_SLOTS : divided_into
+    PAPERS ||--o| PRESENTATION_SLOTS : scheduled_in
+
+    CONFERENCES {
+        int conference_id PK
+        string title
+        string acronym
+        int year
+        date start_date
+        date end_date
+        string location
+        date submission_deadline
+    }
+
+    TRACKS {
+        int track_id PK
+        int conference_id FK
+        string track_name
+        string description
+    }
+
+    TOPICS {
+        int topic_id PK
+        int track_id FK
+        string topic_name
+        string keywords
+    }
+
+    USERS {
+        int user_id PK
+        string first_name
+        string last_name
+        string email UK
+        string affiliation
+        string role
+    }
+
+    AUTHORS {
+        int author_id PK
+        int user_id FK
+        string affiliation
+        string country
+        string orcid_id
+    }
+
+    PAPERS {
+        int paper_id PK
+        int track_id FK
+        int primary_author_id FK
+        string title
+        string abstract
+        string status
+        datetime submission_date
+    }
+
+    PAPER_AUTHORS {
+        int paper_id PK_FK
+        int author_id PK_FK
+        int author_order
+        boolean is_corresponding
+    }
+
+    PAPER_VERSIONS {
+        int version_id PK
+        int paper_id FK
+        int version_num
+        string file_path
+        string changelog
+        boolean is_camera_ready
+        datetime upload_timestamp
+    }
+
+    REVIEWERS {
+        int reviewer_id PK
+        int user_id FK
+        int max_workload
+        boolean is_active
+    }
+
+    REVIEWER_EXPERTISE {
+        int reviewer_id PK_FK
+        int topic_id PK_FK
+        string expertise_level
+    }
+
+    REVIEWER_CONFLICTS {
+        int conflict_id PK
+        int reviewer_id FK
+        int author_id FK
+        string conflict_type
+        datetime declared_at
+    }
+
+    PAPER_ASSIGNMENTS {
+        int assignment_id PK
+        int paper_id FK
+        int reviewer_id FK
+        string status
+        date assigned_at
+        date due_date
+    }
+
+    REVIEWS {
+        int review_id PK
+        int assignment_id FK_UK
+        int originality
+        int soundness
+        int clarity
+        int overall_score
+        string comments_for_author
+        string confidential_chair_comments
+        datetime submitted_at
+    }
+
+    DECISIONS {
+        int decision_id PK
+        int paper_id FK_UK
+        int chair_id FK
+        string decision_type
+        string feedback_summary
+        datetime decision_date
+    }
+
+    REGISTRATIONS {
+        int registration_id PK
+        int conference_id FK
+        int user_id FK
+        int paper_id FK
+        string registration_type
+        string payment_status
+        decimal amount_paid
+        datetime registered_at
+    }
+
+    SESSIONS {
+        int session_id PK
+        int conference_id FK
+        int track_id FK
+        string session_title
+        date session_date
+        string room_no
+        string session_chair
+    }
+
+    PRESENTATION_SLOTS {
+        int slot_id PK
+        int session_id FK
+        int paper_id FK_UK
+        date slot_date
+        time start_time
+        time end_time
+        int presentation_order
+    }
+                </pre>
+            </div>
+        </div>
+
+        <!-- 14 ENTITY CARDS -->
+        <div class="card">
+            <div class="card-title">📦 The 14 Principal Entities Quick Reference</div>
+            <div class="grid-3">
+                <div class="entity-box">
+                    <div class="entity-name">1. Conferences</div>
+                    <div class="entity-pk">PK: conference_id</div>
+                    <div class="entity-desc">Root event metadata, acronym, year, venue, deadlines, start & end dates.</div>
+                </div>
+                <div class="entity-box">
+                    <div class="entity-name">2. Tracks</div>
+                    <div class="entity-pk">PK: track_id</div>
+                    <div class="entity-fk">FK: conference_id</div>
+                    <div class="entity-desc">Thematic disciplines (e.g. AI/ML, Networks, Security). 1:N with Conference.</div>
+                </div>
+                <div class="entity-box">
+                    <div class="entity-name">3. Topics</div>
+                    <div class="entity-pk">PK: topic_id</div>
+                    <div class="entity-fk">FK: track_id</div>
+                    <div class="entity-desc">Granular research keywords used for reviewer expertise matching.</div>
+                </div>
+                <div class="entity-box">
+                    <div class="entity-name">4. Authors</div>
+                    <div class="entity-pk">PK: author_id</div>
+                    <div class="entity-fk">FK: user_id (1:1 with Users)</div>
+                    <div class="entity-desc">Researcher profile, ORCID ID, bio, and affiliation.</div>
+                </div>
+                <div class="entity-box">
+                    <div class="entity-name">5. Papers</div>
+                    <div class="entity-pk">PK: paper_id</div>
+                    <div class="entity-fk">FK: track_id, primary_author_id</div>
+                    <div class="entity-desc">Master submission record tracking paper title, abstract, and lifecycle status.</div>
+                </div>
+                <div class="entity-box">
+                    <div class="entity-name">6. Versions (Paper_Versions)</div>
+                    <div class="entity-pk">PK: version_id</div>
+                    <div class="entity-fk">FK: paper_id</div>
+                    <div class="entity-desc">Tracks PDF revisions (Initial draft, revision, camera-ready) with changelogs.</div>
+                </div>
+                <div class="entity-box">
+                    <div class="entity-name">7. Reviewers</div>
+                    <div class="entity-pk">PK: reviewer_id</div>
+                    <div class="entity-fk">FK: user_id (1:1 with Users)</div>
+                    <div class="entity-desc">Peer evaluator profile maintaining max workload limit (default: 5).</div>
+                </div>
+                <div class="entity-box">
+                    <div class="entity-name">8. Expertise (Reviewer_Expertise)</div>
+                    <div class="entity-pk">PK: (reviewer_id, topic_id)</div>
+                    <div class="entity-fk">FKs: reviewer_id, topic_id</div>
+                    <div class="entity-desc">M:N competence mapping: EXPERT, KNOWLEDGEABLE, INFORMED.</div>
+                </div>
+                <div class="entity-box">
+                    <div class="entity-name">9. Conflicts (Reviewer_Conflicts)</div>
+                    <div class="entity-pk">PK: conflict_id</div>
+                    <div class="entity-fk">FKs: reviewer_id, author_id</div>
+                    <div class="entity-desc">Bars reviewers from evaluating co-authors or same-institution authors.</div>
+                </div>
+                <div class="entity-box">
+                    <div class="entity-name">10. Assignments (Paper_Assignments)</div>
+                    <div class="entity-pk">PK: assignment_id</div>
+                    <div class="entity-fk">FKs: paper_id, reviewer_id</div>
+                    <div class="entity-desc">Dispatches eligible reviewer to paper; enforces workload & COI barrier.</div>
+                </div>
+                <div class="entity-box">
+                    <div class="entity-name">11. Reviews</div>
+                    <div class="entity-pk">PK: review_id</div>
+                    <div class="entity-fk">FK: assignment_id (1:1 UNIQUE)</div>
+                    <div class="entity-desc">Evaluation scores (1-10) and separated author vs chair comments.</div>
+                </div>
+                <div class="entity-box">
+                    <div class="entity-name">12. Decisions</div>
+                    <div class="entity-pk">PK: decision_id</div>
+                    <div class="entity-fk">FK: paper_id (1:1 UNIQUE), chair_id</div>
+                    <div class="entity-desc">Official verdict: ACCEPT, REJECT, REVISE with chair rationale.</div>
+                </div>
+                <div class="entity-box">
+                    <div class="entity-name">13. Registrations</div>
+                    <div class="entity-pk">PK: registration_id</div>
+                    <div class="entity-fk">FKs: conference_id, user_id, paper_id</div>
+                    <div class="entity-desc">Tracks delegate conference fees, paper clearance, and attendance.</div>
+                </div>
+                <div class="entity-box">
+                    <div class="entity-name">14. Presentation_Slots</div>
+                    <div class="entity-pk">PK: slot_id</div>
+                    <div class="entity-fk">FKs: session_id, paper_id (UNIQUE)</div>
+                    <div class="entity-desc">Hall, session, and time interval allocated to accepted papers.</div>
+                </div>
+                <div class="entity-box" style="border-left-color: #0D9488;">
+                    <div class="entity-name">Supporting: Users</div>
+                    <div class="entity-pk">PK: user_id</div>
+                    <div class="entity-desc">Central authentication & demographics uniting Authors, Reviewers, Chairs.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RELATIONAL SCHEMA HIGHLIGHTS -->
+        <div class="card">
+            <div class="card-title">📋 Relational Schema & Key Constraints</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Table Name</th>
+                        <th>Primary Key</th>
+                        <th>Foreign Keys & Cardinality</th>
+                        <th>Key Domain / Business Constraints</th>
+                        <th>Normal Form</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Conferences</strong></td>
+                        <td><span class="tag-pill tag-pk">conference_id</span></td>
+                        <td>None</td>
+                        <td><span class="tag-pill tag-uk">UNIQUE(acronym, year)</span>, CHECK(end_date >= start_date)</td>
+                        <td>3NF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tracks</strong></td>
+                        <td><span class="tag-pill tag-pk">track_id</span></td>
+                        <td><span class="tag-pill tag-fk">conference_id</span> (1:N)</td>
+                        <td>UNIQUE(conference_id, track_name)</td>
+                        <td>3NF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Topics</strong></td>
+                        <td><span class="tag-pill tag-pk">topic_id</span></td>
+                        <td><span class="tag-pill tag-fk">track_id</span> (1:N)</td>
+                        <td>UNIQUE(track_id, topic_name)</td>
+                        <td>3NF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Users</strong></td>
+                        <td><span class="tag-pill tag-pk">user_id</span></td>
+                        <td>None</td>
+                        <td><span class="tag-pill tag-uk">email UNIQUE</span>, role IN ('CHAIR','AUTHOR','REVIEWER',...)</td>
+                        <td>3NF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Papers</strong></td>
+                        <td><span class="tag-pill tag-pk">paper_id</span></td>
+                        <td><span class="tag-pill tag-fk">track_id, primary_author_id</span></td>
+                        <td>status IN ('SUBMITTED','UNDER_REVIEW','ACCEPTED','REJECTED')</td>
+                        <td>3NF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Paper_Authors</strong></td>
+                        <td><span class="tag-pill tag-pk">(paper_id, author_id)</span></td>
+                        <td><span class="tag-pill tag-fk">paper_id, author_id</span> (M:N)</td>
+                        <td>UNIQUE(paper_id, author_order), author_order >= 1</td>
+                        <td>3NF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Paper_Versions</strong></td>
+                        <td><span class="tag-pill tag-pk">version_id</span></td>
+                        <td><span class="tag-pill tag-fk">paper_id</span> (1:N)</td>
+                        <td>UNIQUE(paper_id, version_num), version_num >= 1</td>
+                        <td>3NF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reviewers</strong></td>
+                        <td><span class="tag-pill tag-pk">reviewer_id</span></td>
+                        <td><span class="tag-pill tag-fk">user_id</span> (1:1 UNIQUE)</td>
+                        <td>max_workload > 0 (DEFAULT 5)</td>
+                        <td>3NF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reviewer_Expertise</strong></td>
+                        <td><span class="tag-pill tag-pk">(reviewer_id, topic_id)</span></td>
+                        <td><span class="tag-pill tag-fk">reviewer_id, topic_id</span> (M:N)</td>
+                        <td>expertise_level IN ('EXPERT','KNOWLEDGEABLE','INFORMED')</td>
+                        <td>3NF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reviewer_Conflicts</strong></td>
+                        <td><span class="tag-pill tag-pk">conflict_id</span></td>
+                        <td><span class="tag-pill tag-fk">reviewer_id, author_id</span></td>
+                        <td>UNIQUE(reviewer_id, author_id)</td>
+                        <td>3NF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Paper_Assignments</strong></td>
+                        <td><span class="tag-pill tag-pk">assignment_id</span></td>
+                        <td><span class="tag-pill tag-fk">paper_id, reviewer_id</span></td>
+                        <td>UNIQUE(paper_id, reviewer_id), status IN ('ASSIGNED','COMPLETED',...)</td>
+                        <td>3NF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reviews</strong></td>
+                        <td><span class="tag-pill tag-pk">review_id</span></td>
+                        <td><span class="tag-pill tag-fk">assignment_id</span> (1:1 UNIQUE)</td>
+                        <td>CHECK originality, soundness, clarity, overall BETWEEN 1 AND 10</td>
+                        <td>3NF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Decisions</strong></td>
+                        <td><span class="tag-pill tag-pk">decision_id</span></td>
+                        <td><span class="tag-pill tag-fk">paper_id</span> (1:1 UNIQUE), <span class="tag-pill tag-fk">chair_id</span></td>
+                        <td>decision_type IN ('ACCEPT','REJECT','MAJOR_REVISION','MINOR_REVISION')</td>
+                        <td>3NF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Presentation_Slots</strong></td>
+                        <td><span class="tag-pill tag-pk">slot_id</span></td>
+                        <td><span class="tag-pill tag-fk">session_id</span>, <span class="tag-pill tag-fk">paper_id</span> (1:1 UNIQUE)</td>
+                        <td>CHECK end_time > start_time, UNIQUE(session_id, presentation_order)</td>
+                        <td>3NF</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+</body>
+</html>
